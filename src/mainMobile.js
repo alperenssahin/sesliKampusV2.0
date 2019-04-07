@@ -7,6 +7,7 @@ class MainMobile extends React.Component {
         return (<div className="mobile container">
             <div className="filter">
                 <Header/>
+                <Footer/>
             </div>
         </div>);
     }

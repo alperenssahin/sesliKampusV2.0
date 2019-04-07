@@ -12,7 +12,7 @@ class Header extends React.Component {
                 <div className="header mid">sesli kampüs</div>
                 <div className="header left"><center><i className="material-icons mono search">
                     search
-                </i><div className="search text mono">Ara</div></center></div>
+                </i><div className="search text mono">ara</div></center></div>
             </div>
 
         </div>);
