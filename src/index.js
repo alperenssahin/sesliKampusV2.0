@@ -1,10 +1,10 @@
 'use strict';
 // import {MainDesktop} from "./mainDesktop";
 // import {MainMobile} from "./mainMobile"
-class LikeButton extends React.Component {
+const Router = window.ReactRouterDOM.BrowserRouter;
+class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { liked: false };
     }
 
     render() {
@@ -16,9 +16,9 @@ class LikeButton extends React.Component {
             page = <MainDesktop/>;
 
         }
-       return(page);
+        return(<Router>{page}</Router>);
     }
 }
 
 const domContainer = document.querySelector('#root');
-ReactDOM.render(<LikeButton/>, domContainer);
+ReactDOM.render(<Main/>, domContainer);

@@ -1,12 +1,13 @@
- class MainMobile extends React.Component{
+class MainMobile extends React.Component {
     constructor(props) {
         super(props);
     }
+
     render() {
-        return(<div className="desktop container">
+        return (<div className="mobile container">
             <div className="filter">
-            <h1> sesli kampüs</h1>
-</div>
+                <Header/>
+            </div>
         </div>);
     }
 }
