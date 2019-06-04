@@ -6,6 +6,7 @@ class Footer extends React.Component {
     render() {
         return (<div className="footer container">
             <div className="footer inside">
+                <div></div>
                 <div className="footer menu" id="filter">
                     <center>
                         <i className="material-icons">
@@ -53,6 +54,7 @@ class Footer extends React.Component {
                         <div className="footer menu text">sesler</div>
                     </center>
                 </div>
+                <div></div>
             </div>
         </div>);
     }
