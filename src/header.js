@@ -9,7 +9,7 @@ class Header extends React.Component {
                 <div className="header left">
                     <img className="logo" src="symbols/logoBig.png"/>
                 </div>
-                <div className="header mid">sesli kampüs</div>
+                <div className="header mid" id={"header-title"}>sesli kampüs</div>
                 <div className="header left"><center><i className="material-icons mono search">
                     search
                 </i><div className="search text mono">ara</div></center></div>

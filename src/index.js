@@ -7,7 +7,7 @@ class Main extends React.Component {
         super(props);
     }
 
-    render() {
+        render() {
         let page;
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             page = <MainMobile/>;
