@@ -1,0 +1,70 @@
+.soundList.out{
+    color:#CCCCCC;
+    font-family: "DIN Pro Bold" ;
+}
+
+.soundList.filter-title{
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+
+}
+.soundList.container{
+    overflow: scroll;
+}
+a:-webkit-any-link{
+    color: #CCCCCC; !important;
+    text-decoration: none !important;
+}
+.list-element.container{
+
+    width: 100%;
+    height: 100px;
+    background-color: rgba(128, 128, 128, 0.31);
+    display: flex;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.list-element.photo{
+    position: relative;
+    top:-15px;
+    width: 72px;
+    height: 128px;
+    background-color: rgb(251, 174, 23);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.list-element.information{
+    height: 100px;
+    align-content: space-between;
+    display: grid;
+}
+.list-element.title{
+    font-size: 20px;
+    font-family: 'DIN Pro';
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.list-element.date-time{
+    display: flex;
+    margin-bottom: 20px;
+}
+.list-element.date{
+    margin-right: 20px;
+    font-size: 14px;
+
+}
+.list-element.time{
+    font-family: 'DIN Pro';
+    font-size: 14px;
+
+}
+.list-element.tag{
+    font-family: 'DIN Pro';
+    font-size: 12px;
+    margin-bottom: 10px;
+
+}
