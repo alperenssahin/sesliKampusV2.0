@@ -8,22 +8,26 @@ class FooterPlayer extends React.Component {
             duration:'00:00',
             currentTime: '00:00',
             play:false,
-            first:true,
+            first:false,
             buffer:0,
             current:0,
+            fullPage:false,
         }
     }
 
     componentDidMount() {
         this.play();
-        document.getElementById('play-pause').addEventListener('click',this.playPauseHandler.bind());
-        document.getElementById('current-point').addEventListener('touchmove',this.currentPointHandler.bind());
-        document.getElementById('process-b').addEventListener('touchstart',this.processClickHandler.bind());
+        this.setState({first:true});
+        document.getElementById('play-pause').addEventListener('click',this.playPauseHandler.bind(this));
+        document.getElementById('full-page-player').addEventListener('click',this.fullPageHandler.bind(this));
+        document.getElementById('current-point').addEventListener('touchmove',this.currentPointHandler.bind(this));
+        document.getElementById('process-b').addEventListener('touchstart',this.processClickHandler.bind(this));
     }
     componentWillUnmount(){
-        document.getElementById('play-pause').removeEventListener('click',this.playPauseHandler.bind());
-        document.getElementById('current-point').removeEventListener('touchmove',this.currentPointHandler.bind());
-        document.getElementById('process-b').removeEventListener('touchstart',this.processClickHandler.bind());
+        document.getElementById('full-page-player').removeEventListener('click',this.fullPageHandler.bind(this));
+        document.getElementById('play-pause').removeEventListener('click',this.playPauseHandler.bind(this));
+        document.getElementById('current-point').removeEventListener('touchmove',this.currentPointHandler.bind(this));
+        document.getElementById('process-b').removeEventListener('touchstart',this.processClickHandler.bind(this));
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -53,10 +57,7 @@ class FooterPlayer extends React.Component {
                 $('#myPlayer').attr('src','/'+s.val());
                 let audio = document.getElementById('myPlayer');
                 // console.log(audio.src , audio.duration);
-                if(this.state.first){
-                    audio.play();
-                    this.setState({first:false});
-                }
+                sd.npIndex = sd.keyList.indexOf(this. props.soundId);
                 audio.onloadedmetadata = ()=>{
                     let duration =audio.duration;
                     this.setState({duration:this.secondTommss(duration)});
@@ -67,6 +68,7 @@ class FooterPlayer extends React.Component {
                     this.setState({current:this.processPercentage(audio.duration,audio.currentTime)});
 
                 };
+                audio.autoplay = true;
                 audio.onplay = ()=>{
                     this.setState({play:true});
                 };
@@ -117,6 +119,11 @@ class FooterPlayer extends React.Component {
         let duration = audio.duration*per/100;
         audio.currentTime = duration;
     }
+    fullPageHandler(){
+        console.log('a');
+
+        this.setState(state=>({fullPage:!state.fullPage}));
+    }
     render() {
         let play_pause;
         if(this.state.play){
@@ -124,11 +131,44 @@ class FooterPlayer extends React.Component {
         }else{
             play_pause = 'url("/symbols/playDeg.png")';
         }
+
+        let nextSound,prevSound;
+
+        if(sd.npIndex === 0){
+            prevSound = sd.keyList[0];
+            nextSound = sd.keyList[1];
+        }else if(sd.npIndex === sd.keyList.length-1){
+            nextSound = sd.keyList[sd.keyList.length -1];
+            prevSound = sd.keyList[sd.keyList.length -2];
+        }else{
+            nextSound = sd.keyList[sd.npIndex+1];
+            prevSound = sd.keyList[sd.npIndex-1];
+        }
+        let fullPage;
+        if(this.state.fullPage){
+            $('.footer-player-inside').innerHeight(window.innerHeight-40);
+            $('.footer.container').innerHeight(window.innerHeight-40);
+            $('#full-page-player').css('transform','rotate(180deg)');
+            $('#full-page-player').css('margin-top','15px');
+            $('.step.locations').css('font-size','14px');
+            $('.step.material-icons').css('font-size','16px');
+            $('.footer-player.outside').innerHeight(window.innerHeight-90);
+
+            fullPage = <FullPagePlayer/>;
+        }else{
+            $('.footer-player-inside').innerHeight(132);
+            $('.footer.container').innerHeight(200);
+            $('#full-page-player').css('transform','rotate(0deg)');
+            $('#full-page-player').css('margin-top','0px');
+            $('.step.locations').css('font-size','10px');
+            $('.step.material-icons').css('font-size','12px');
+            $('.footer-player.outside').innerHeight(152);
+            fullPage = null;
+        }
         return (
             <div className={"footer-player-container"}>
                 <div className={"full-page-player-button"}>
-                    <div className="full-page icon">
-
+                    <div className="full-page icon" id={"full-page-player"}>
                     </div>
                 </div>
                 <div className={"footer-player-inside"}>
@@ -144,11 +184,11 @@ class FooterPlayer extends React.Component {
                         <div className={" locations step step3"}>{this.state.step3}</div>
 
                     </div>
+                    <div className={"full-page-container"}>{fullPage}</div>
                     <div className={"footer-player process-bar"} id={"process-b"}>
                         <div className={"process-bar buffer"} style={{width:this.state.buffer+'%'}}>
                         <div className={"process-bar current"} style={{width:this.state.current+'%'}}>
                             <div className={"current current-point"} id={"current-point"}>
-
                             </div>
                         </div>
                         </div>
@@ -158,10 +198,10 @@ class FooterPlayer extends React.Component {
                         <div className={"time-section remaining"}>{this.state.duration}</div>
                     </div>
                     <div className={"footer-player controller"}>
-                        <div className={"controller prev"} style={{background: 'url("/symbols/prevOne.png")'}}> </div>
+                        <Link to={"/now/"+prevSound}><div className={"controller prev"} style={{background: 'url("/symbols/prevOne.png")'}}> </div></Link>
                         <div className={"controller play"} id={"play-pause"}
                              style={{backgroundImage: play_pause}}> </div>
-                        <div className={"controller next"} style={{background: 'url("/symbols/nextOne.png")'}}> </div>
+                        <Link to={"/now/"+nextSound}> <div className={"controller next"} style={{background: 'url("/symbols/nextOne.png")'}}> </div></Link>
                     </div>
                 </div>
             </div>

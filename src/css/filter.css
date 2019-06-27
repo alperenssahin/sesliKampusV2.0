@@ -1,0 +1,114 @@
+.filter-container {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(102, 102, 102, 0.5);
+    position: absolute;
+    z-index: 10;
+    top: 60px;
+}
+
+.filter-inside-container {
+    width: 70%;
+    min-height: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.inside-content-filter{
+    width: 100%;
+    min-height: 10vh;
+    border-radius: 10px;
+    background-color: rgb(26, 26, 26);
+}
+.filter-submit{
+    background: linear-gradient(90deg, rgb(102, 45, 145) 0%, rgb(212, 20, 90) 50%, rgb(241, 90, 36) 100%);
+    border-radius: 10px;
+    width: fit-content;
+    min-height: 30px;
+    float: right;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: "DIN Pro Bold";
+    font-size: 25px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+.filter-submit:hover{
+    color: #CCCCCC;
+}
+
+.content-container{
+    width: 95%;
+    margin: 10px;
+    display: grid;
+    align-content: space-between;
+    color: #CCCCCC;
+}
+
+.filter-text{
+    color: #CCCCCC;
+    font-family: "DIN Pro";
+    font-size: 10px;
+}
+.filter-box{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.box-content{
+    display: flex;
+    margin-top: 5px;
+}
+.filter-year-selector.container{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.filter-selector.select{
+    background-color: #fbae17;
+    border-radius: 20px;
+    height: 20px;
+    width: 60px;
+    border: none;
+    padding-left: 10px;
+
+}
+.filter-space-selector{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+input[type="checkbox"].space{
+    position: absolute;
+    opacity: 0;
+}
+input[type="checkbox"]:checked + label{
+    background-color: #fbae17;
+    color: black;
+}
+input[type="checkbox"] + label{
+    border-radius: 20px;
+    font-size: 10px;
+    font-family: "DIN Pro";
+    color: #CCCCCC;
+    background-color: black;
+    display: grid;
+    width: 60px;
+    text-align: center;
+    align-content: center;
+    height: 20px;
+}
+.filter-time-selector.container{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.filter-tag-selector.select{
+    background-color: #fbae17;
+    border-radius: 20px;
+    height: 20px;
+    width: 145px;
+    border: none;
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

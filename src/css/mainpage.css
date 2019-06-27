@@ -35,6 +35,7 @@ a:-webkit-any-link{
     background-color: rgb(251, 174, 23);
     margin-left: 10px;
     margin-right: 10px;
+    z-index: 5;
 }
 .list-element.information{
     height: 100px;

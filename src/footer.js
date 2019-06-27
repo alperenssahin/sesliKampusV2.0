@@ -11,11 +11,12 @@ class Footer extends React.Component {
     }
     render() {
         return (<div className="footer container">
-            <Route exact path={'/'} component={this.footerPlayer}/>
-            <Route exact path={'/now/:id'} component={this.footerPlayerPlaying}/>
+            {/*<Route exact path={'/'} component={this.footerPlayer}/>*/}
+            <div className={"footer-player outside"}><Route  path={'/now/:id'} component={this.footerPlayerPlaying}/></div>
             <div className={"footer-inside container"}>
                 <div className="footer inside">
                     <div></div>
+                    <Link to={"f/filter"}>
                     <div className="footer menu" id="filter">
                         <center>
                             <i className="material-icons">
@@ -24,6 +25,7 @@ class Footer extends React.Component {
                             <div className="footer menu text">filtrele</div>
                         </center>
                     </div>
+                    </Link>
                     <div className="footer marker text"> |</div>
                     <div className="footer menu" id="sort">
                         <center>

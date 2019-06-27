@@ -1,17 +1,21 @@
+
+
 class MainPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {list: <Loading height={69}/>}//todo:bu kısma loading logosu eklenecek
+        this.state = {list: <Loading height={69}/>}
     }
 
     componentDidMount() {
         let mb = new MainMobile;
         mb.resize();
         let list = [];
-        firebase.database().ref('/sounds').once('value').then(s => {
+        firebase.database().ref('/sounds').limitToLast(10).once('value').then(s => {
             //todo:for içine sokulmadan sıralamalar yada filtreler değerlendirilir
-            for (let key in s.val()) {
-                list.push(<Link to={"/now/"+key} clasName={"list-element-link"}><ListElement data={s.val()[key]} soundKey={key}/></Link>);
+            sd.keyList = msort(s.val());
+            sd.data = s.val();
+            for (let key of sd.keyList) {
+                list.push(<Link to={"/now/" + key} clasName={"list-element-link"}><ListElement data={s.val()[key]} soundKey={key}/></Link>);
             }
             this.setState({list: list});
         })
@@ -19,7 +23,7 @@ class MainPage extends React.Component {
 
     render() {
         return (<div className={"soundList out"}>
-            <div className={"soundList filter-title"}> En yeniler </div>
+            <div className={"soundList filter-title"}> En yeniler</div>
             <div className={"soundList container"}>
                 {this.state.list}
             </div>
