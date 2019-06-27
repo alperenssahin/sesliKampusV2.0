@@ -10,12 +10,12 @@ class MainPage extends React.Component {
         let mb = new MainMobile;
         mb.resize();
         let list = [];
-        firebase.database().ref('/sounds').limitToLast(10).once('value').then(s => {
+        firebase.database().ref('/sounds').limitToLast(20).once('value').then(s => {
             //todo:for içine sokulmadan sıralamalar yada filtreler değerlendirilir
             sd.keyList = msort(s.val());
             sd.data = s.val();
             for (let key of sd.keyList) {
-                list.push(<Link to={"/now/" + key} clasName={"list-element-link"}><ListElement data={s.val()[key]} soundKey={key}/></Link>);
+                list.unshift(<Link to={"/now/" + key} clasName={"list-element-link"}><ListElement data={s.val()[key]} soundKey={key}/></Link>);
             }
             this.setState({list: list});
         })

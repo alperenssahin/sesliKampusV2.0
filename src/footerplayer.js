@@ -54,7 +54,15 @@ class FooterPlayer extends React.Component {
                 this.setState({data: data});
             });
             firebase.database().ref('/sounds/'+this.props.soundId+'/soundPath').once('value').then(s=>{
-                $('#myPlayer').attr('src','/'+s.val());
+                const storage = firebase.storage();
+                const gsReference = storage.refFromURL(`gs://seslikampus.appspot.com/sounds/${s.val()}`);
+                gsReference.getDownloadURL().then(function (url) {
+                    return url;
+                }).then((url) => {
+                    // this.setState({urlImage: url})
+                    // console.log(url);
+                    $('#myPlayer').attr('src',url);
+                });
                 let audio = document.getElementById('myPlayer');
                 // console.log(audio.src , audio.duration);
                 sd.npIndex = sd.keyList.indexOf(this. props.soundId);

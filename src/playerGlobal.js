@@ -60,7 +60,7 @@ function msort(data) {
             for (let y = i + 1; y < keys.length; y++) {
                 let ki = data[keys[a]].timestamp;
                 let ty = data[keys[y]].timestamp;
-                if (ki > ty) {
+                if (ki >= ty) {
                     a = y;
                     let tmp = keys[a];
                     keys[a] = keys[i];
@@ -75,7 +75,7 @@ function msort(data) {
             for (let y = i + 1; y < keys.length; y++) {
                 let ki = data[keys[a]].timestamp;
                 let ty = data[keys[y]].timestamp;
-                if (ki < ty) {
+                if (ki <= ty) {
                     a = y;
                     let tmp = keys[a];
                     keys[a] = keys[i];

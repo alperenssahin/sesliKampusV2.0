@@ -26,6 +26,7 @@ class Header extends React.Component {
                 </div>
                 <div className="header mid" id={"header-title"}>
                     <Route path={"*/:type"} component={this.header}/>
+                    <Route exact path={"/"} component={this.header}/>
                 </div>
                 <div className="header left"><center><i className="material-icons mono search">
                     search
