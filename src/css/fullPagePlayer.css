@@ -1,6 +1,6 @@
 .full-page-content{
     background-color: #fbae17;
-    background-image: url("symbols/default.png");
+    background-image: url("/symbols/default.png");
     background-size: contain;
     margin: auto;
 }
