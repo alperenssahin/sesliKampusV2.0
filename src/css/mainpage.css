@@ -33,6 +33,8 @@ a:-webkit-any-link{
     width: 72px;
     height: 128px;
     background-color: rgb(251, 174, 23);
+    background-image: url("symbols/default.png");
+    background-size:contain ;
     margin-left: 10px;
     margin-right: 10px;
     z-index: 5;

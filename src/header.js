@@ -22,7 +22,7 @@ class Header extends React.Component {
         return (<div className="header container">
             <div className="inside header">
                 <div className="header left">
-                    <img className="logo" src="/symbols/logoBig.png" id={"main-logo"}/>
+                    <img className="logo" src="symbols/logoBig.png" id={"main-logo"}/>
                 </div>
                 <div className="header mid" id={"header-title"}>
                     <Route path={"*/:type"} component={this.header}/>
