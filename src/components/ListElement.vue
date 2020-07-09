@@ -1,16 +1,22 @@
 <template>
+    <router-link v-bind:to="`?now=${sound.soundId}`">
     <div class="list-element-box" v-bind:class="{active:sound.isActive}" role="button" v-bind:id="sound.soundId" v-on:click="clickHandler(sound)">
         <div class="photo">
             <img v-bind:src="`/images/${sound.imagePath}`"
                  v-bind:alt="sound.alt?sound.alt:'Bir zamanlar galatasarayda tanitim kapagi'">
         </div>
         <div class="info" role="article">
-            <div class="top"><span class="title">{{title}}</span>-<span
-                    class="hour">{{sound.time}}</span></div>
-            <div class="mid">Kayıt Tarihi : <span class="date">{{sound.date}}</span></div>
+            <h2 class="top"><span class="title">{{title}}</span>-<span
+                    class="hour">{{sound.time}}</span></h2>
+            <div class="mid">
+                <div >Kayıt Tarihi : <span class="date">{{sound.date}}</span></div>
+                <div><span class="date">{{sound.totalListening?sound.totalListening:0}}</span> dinlenme</div>
+            </div>
+
             <div class="bot"><span class="tags">{{sound.tag}}</span></div>
         </div>
     </div>
+    </router-link>
 </template>
 
 <script>
@@ -22,6 +28,9 @@
             clickHandler:Function,
         },
         created() {
+            window.db.ref(`/sounds/${this.$props.sound.soundId}`).on("child_changed",(s)=>{
+                this.$props.sound.totalListening = s.val()
+            });
             this.$parent.$parent.locationDownloader("step3", this.$props.sound.location.step3).then(s => {
                 this.$data.title = s;
             });
@@ -34,6 +43,11 @@
 </script>
 
 <style scoped>
+    @media only screen and (max-width: 321px) {
+        .info .mid{
+            grid-template-columns: 2fr 1fr !important;
+        }
+    }
     .list-element-box {
         display: grid;
         grid-template-columns: 1fr 5fr;
@@ -46,9 +60,20 @@
         margin-bottom: 50px;
         color: #cccccc;
     }
-
+    h2{
+        font-size: 1em;
+    }
+     a{
+        text-decoration: none;
+    }
     .list-element-box.active{
         background-color:#93278F;
+    }
+    .desktop .list-element-box:hover{
+        background-color:#b6396c;
+    }
+    .mobile .list-element-box:active{
+        background-color:#b6396c;
     }
 
     .list-element-box .info {
@@ -77,7 +102,11 @@
 
     .info .mid {
         font-family: "DIN Pro Light";
-        font-size: 1em;
+        font-size: 0.9em;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 10px;
+
     }
 
     .info .tags {

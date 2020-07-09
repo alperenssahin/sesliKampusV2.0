@@ -1,5 +1,5 @@
 <template>
-    <div class="player-box" v-bind:class="{full:isFullPage}">
+    <div class="player-box" v-bind:class="{full:isFullPage}" v-on:mousemove="currentPointHandler">
         <div class="full-page-toggle footer" v-bind:class="{full:isFullPage}" role="button"
              aria-labelledby="full-page-description" v-on:click="fullPageClickHandler">
             <span class="material-icons" v-if="!isFullPage">
@@ -26,11 +26,12 @@ keyboard_arrow_right
                      v-bind:alt="activeSound?activeSound.alt:'Bir zamanlar galatasarayda tanitim kapagi'">
             </div>
         </div>
-        <div class="process-bar" v-on:touchstart="processClickHandler">
+        <div class="process-bar" v-on:touchstart="processClickHandler" v-on:click="processClickHandler">
             <div class="current-bar load" v-bind:style="{width:loadProgress+'%'}">
-            <div class="current-bar" v-bind:style="{width:progress+'%'}">
-                <div class="pointer" role="button" v-on:touchmove="currentPointHandler"></div>
-            </div>
+                <div class="current-bar" v-bind:style="{width:progress+'%'}">
+                    <div class="pointer" role="button" v-on:touchmove="currentPointHandler"
+                         v-on:mousedown="isDrag = true"></div>
+                </div>
             </div>
         </div>
         <div class="duration">
@@ -40,22 +41,42 @@ keyboard_arrow_right
 
         <div class="controller-container">
             <div class="controller">
-            <span class="material-icons shuffle controller-button" role="button">
-                shuffle
-           </span>
-                <span class="material-icons prev controller-button" role="button"
-                      v-on:click="activeSoundHandler(activeSound.prev)">
-                skip_previous
-           </span>
-                <span class="material-icons play-pause controller-button" role="button" v-on:click="playPauseHandler">
-                {{isPlay?"pause":"play_arrow"}}
-           </span>
-                <span class="material-icons next controller-button" role="button"
-                      v-on:click="activeSoundHandler(activeSound.next)">
-                skip_next
-           </span><span class="material-icons replay controller-button" role="button">
-                replay
-           </span>
+                <div class="player-button-box">
+                    <span class="material-icons shuffle controller-button" aria-labelledby="shuffle-description" role="button" v-bind:class="{active:isShuffle}"
+                          v-on:click="shuffleHandler">
+                        shuffle
+                   </span>
+                    <span class="player-button-description" id="shuffle-description">Karışık Dinle</span>
+                </div>
+                <div class="player-button-box">
+                    <span class="material-icons prev controller-button" aria-labelledby="prev-description" role="button"
+                          v-on:click="activeSoundHandler(activeSound?activeSound.prev:0)">
+                    skip_previous
+                     </span>
+                    <span class="player-button-description" id="prev-description">Önceki Ses</span>
+                </div>
+                <div class="player-button-box">
+                    <span class="material-icons play-pause controller-button" aria-labelledby="play-description" role="button" v-on:click="playPauseHandler">
+                    {{isPlay?"pause":"play_arrow"}}
+                    </span>
+                    <span class="player-button-description" id="play-description"> {{isPlay?"Durdur":"Dinle"}}</span>
+
+                </div>
+                <div class="player-button-box">
+                    <span class="material-icons next controller-button"  aria-labelledby="next-description" role="button"
+                          v-on:click="activeSoundHandler(activeSound?activeSound.next:1)">
+                    skip_next
+                    </span>
+                    <span class="player-button-description" id="next-description">Sıradaki Ses</span>
+
+                </div>
+                <div class="player-button-box">
+                    <span class="material-icons replay controller-button" aria-labelledby="replay-description" v-bind:class="{active:isReplay}"
+                          role="button" v-on:click="replayHandler">
+                        replay
+                   </span>
+                    <span class="player-button-description" id="replay-description">Tekrar Dinle</span>
+                </div>
             </div>
         </div>
     </div>
@@ -69,26 +90,55 @@ keyboard_arrow_right
             activeSoundHandler: Function,
         },
         mounted() {
+            document.addEventListener("mouseup", () => {
+                this.$data.isDrag = false;
+            })
             let mp = document.getElementById("myPlayer");
             mp.autoplay = true;
             mp.onplay = () => {
-                this.$data.isPlay = true;
+                if (this.$props.activeSound) {
+                    this.$router.replace({name:"Home",query:{now:this.$props.activeSound.soundId}});
+                    this.$data.isPlay = true;
+                }
             }
             mp.onpause = () => {
-                this.$data.isPlay = false;
+                if (this.$props.activeSound) {
+                    this.$data.isPlay = false;
+                }
             }
             mp.onprogress = () => {
-                if(mp.buffered.length >0){
-                   this.$data.loadProgress = this.processPercentage(mp.duration,mp.buffered.end(0));
+                if (this.$props.activeSound) {
+                    if (mp.buffered.length > 0) {
+                        this.$data.loadProgress = this.processPercentage(mp.duration, mp.buffered.end(0));
+                    }
                 }
             }
             mp.onloadedmetadata = () => {
-
+                if (this.$props.activeSound) {
+                    this.$data.duration = this.timeAdapter(mp.duration);
+                }
             }
             mp.ontimeupdate = () => {
-                this.$data.duration = this.timeAdapter(mp.duration);
-                this.$data.currentTime = this.timeAdapter(mp.currentTime);
-                this.$data.progress = this.processPercentage(mp.duration,mp.currentTime);
+                if (this.$props.activeSound) {
+                    this.$data.currentTime = this.timeAdapter(mp.currentTime);
+                    this.$data.progress = this.processPercentage(mp.duration, mp.currentTime);
+                }
+
+            }
+            mp.onended = () => {
+                if (this.$props.activeSound) {
+                    window.db.ref(`/sounds/${this.$props.activeSound.soundId}`).transaction((post)=>{
+                        if(post){
+                            if(post.totalListening){
+                                post.totalListening++;
+                            }else{
+                                post.totalListening = 1;
+                            }
+                        }
+                        return post;
+                    });
+                    this.$parent.$parent.nextHandler();
+                }
             }
         },
         updated: function () {
@@ -109,19 +159,24 @@ keyboard_arrow_right
                         const ref = window.sto.refFromURL(`gs://seslikampus.appspot.com/sounds/${this.$props.activeSound.soundPath}`);
                         ref.getDownloadURL().then(s => {
                             document.getElementById("myPlayer").src = s;
-                            document.getElementById("myPlayer").play();
                         })
                         this.$data.prevSound = this.$props.activeSound;
                     }
-
                 }
             })
-
         },
         methods: {
+            replayHandler: function () {
+                this.$parent.$parent.$data.isReplay = !this.$data.isReplay;
+                this.$data.isReplay = !this.$data.isReplay;
+            },
+            shuffleHandler: function () {
+                this.$parent.$parent.$data.isShuffle = !this.$data.isShuffle;
+                this.$data.isShuffle = !this.$data.isShuffle;
+            },
             timeAdapter: function (second) {
-                let minute = Math.floor(second / 60);
-                let sec = second % 60;
+                let minute = Math.floor(second / 59);
+                let sec = second % 59;
                 if (minute < 9.5) {
                     minute = "0" + minute.toFixed(0);
                 } else {
@@ -132,7 +187,7 @@ keyboard_arrow_right
                 } else {
                     sec = sec.toFixed(0);
                 }
-                return `${minute}:${sec}`;
+                return `${minute === "NaN" ? "--" : minute}:${sec === "NaN" ? "--" : sec}`;
             }, processPercentage: function (duration, current) {
                 return current * 100 / duration;
             },
@@ -146,30 +201,49 @@ keyboard_arrow_right
                 }
                 this.$data.isPlay = !this.$data.isPlay;
             },
-            currentPointHandler(e){
-                let audio = document.getElementById('myPlayer');
-                let per = e.touches[0].clientX/window.innerWidth*100;
-                let duration = audio.duration*per/100;
-                audio.currentTime = duration;
+            currentPointHandler(e) {
+                if (this.$props.activeSound) {
+                    if (e.touches) {
+                        let audio = document.getElementById('myPlayer');
+                        let per = e.touches[0].clientX / window.innerWidth * 100;
+                        let duration = audio.duration * per / 100;
+                        audio.currentTime = duration;
+                    } else {
+                        if (this.$data.isDrag) {
+                            document.getSelection().empty();
+                            let audio = document.getElementById('myPlayer');
+                            let per = e.clientX / window.innerWidth * 100;
+                            let duration = audio.duration * per / 100;
+                            audio.currentTime = duration;
+
+                        }
+                    }
+                }
             },
-            processClickHandler(e){
-                let audio = document.getElementById('myPlayer');
-                let per = e.touches[0].clientX/window.innerWidth*100;
-                let duration = audio.duration*per/100;
-                audio.currentTime = duration;
+            processClickHandler(e) {
+                if (this.$props.activeSound) {
+                    let audio = document.getElementById('myPlayer');
+                    let per;
+                    if (e.touches) {
+                        per = e.touches[0].clientX / window.innerWidth * 100;
+                    } else {
+                        per = e.clientX / window.innerWidth * 100;
+                    }
+                    let duration = audio.duration * per / 100;
+                    audio.currentTime = duration;
+                }
             }
         }, data: function () {
             return {
+                isDrag: false,
                 isPlay: false,
-                isShuffle: false,
-                isRepeat: false,
                 isFullPage: false,
-                next: this.$parent.$parent.$data.indexes.next,
-                prev: this.$parent.$parent.$data.indexes.prev,
+                isShuffle: false,
+                isReplay: false,
                 duration: "--:--",
                 currentTime: "--:--",
-                progress:0,
-                loadProgress:0,
+                progress: 0,
+                loadProgress: 0,
                 loc1: "---",
                 loc2: "---",
                 loc3: "---",
@@ -179,6 +253,29 @@ keyboard_arrow_right
 </script>
 
 <style scoped>
+    @media only screen and (min-width: 720px) {
+        .full-page-area.active {
+            height: 70vh !important;
+
+        }
+        .player-box {
+            font-size: 1.5em;
+        }
+        .full-page-area.active .photo-area {
+            height: 65vh !important;
+            width: 36.6vh !important;
+            margin-top: 0 !important;
+        }
+
+    }
+
+    .desktop [role=button]:hover {
+        color: #f15724;
+    }
+    .mobile [role=button]:active {
+        color: #f15724;
+    }
+
     .player-box {
         display: grid;
         grid-template-columns: 1fr;
@@ -199,11 +296,16 @@ keyboard_arrow_right
         background-color: #cccccc;
     }
 
+    .process-bar:hover {
+        cursor: pointer;
+    }
+
     .current-bar {
         width: 30vw;
         height: 10px;
         background-color: #93278F;
     }
+
     .current-bar.load {
 
         background-color: #847c84;
@@ -220,17 +322,30 @@ keyboard_arrow_right
         float: right;
     }
 
+    .desktop .pointer:hover ,.mobile .pointer:active {
+        background-color: #f15724;
+    }
+
     .controller {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+        grid-template-columns: 3fr 2fr 1fr 2fr 3fr;
         align-items: center;
         justify-items: center;
     }
 
-    .controller .play-pause {
+    .controller .play-pause{
         font-size: 4em;
         text-decoration: none;
-        background: -webkit-linear-gradient(#93278F, #f15724);
+        background: -webkit-linear-gradient(180deg, #93278F, #f15724);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .controller .play-pause ~ span{
+       color: #f15724;
+    }
+
+    .controller .play-pause:hover {
+        background: -webkit-linear-gradient(0deg, #93278F, #f15724);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -245,7 +360,7 @@ keyboard_arrow_right
 
     .location-item {
         color: #ccc;
-        font-size: 0.6em;
+        font-size: 0.7em;
         margin-right: 0;
         margin-left: 0;
         margin-bottom: 5px;
@@ -256,12 +371,20 @@ keyboard_arrow_right
     .location-item.last {
         color: #fbae17;
         font-family: "DIN Pro Bold";
-        font-size: 0.7em;
+        font-size: 0.8em;
         margin-right: 10px;
     }
 
     .location-item.first {
         margin-left: 10px;
+    }
+
+    .replay.active, .replay.active ~ span {
+        color: #f15724;
+    }
+
+    .shuffle.active,.shuffle.active ~ span {
+        color: #f15724;
     }
 
     .seperator {
@@ -301,8 +424,13 @@ keyboard_arrow_right
         border-top-right-radius: 20px;
         border-top-left-radius: 20px;
         width: 100vw;
+    }
 
-
+    .desktop .full-page-toggle.full:hover {
+        color: #fbae17 !important;
+    }
+    .mobile .full-page-toggle.full:active {
+        color: #fbae17 !important;
     }
 
     .full-page-toggle.full span {
@@ -348,5 +476,22 @@ keyboard_arrow_right
     .full-page-area.active .photo-area img {
         height: 55vh;
         width: 31vh;
+    }
+    .player-button-box{
+        display: grid;
+        justify-items: center;
+    }
+    .desktop .player-button-box span:hover ~ .player-button-description{
+        color: #f15724;
+    }
+    .mobile .player-button-box span:active ~ .player-button-description{
+        color: #f15724;
+    }
+    .player-button-description{
+        font-size: 0.7em;
+        width: fit-content;
+        text-align: center;
+        height: 20px;
+        color: #ccc;
     }
 </style>

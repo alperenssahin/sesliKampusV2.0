@@ -27,4 +27,10 @@
         max-height: 60vh;
         overflow-y: scroll;
     }
+    @media only screen and (min-width: 720px) {
+        .main-box{
+            padding-left: 30vw;
+            padding-right: 30vw;
+        }
+    }
 </style>
