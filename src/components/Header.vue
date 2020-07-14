@@ -2,7 +2,7 @@
     <header class="header-box">
         <a href="/" aria-label="yenile" role="button" class="logo">S</a>
         <h1>Sesli Kampus</h1>
-        <div class="info" role="button">
+        <div class="info" role="button"  tabindex="0" v-on:click="getInfoHandler" v-on:keypress.enter="getInfoHandler">
         <span class="material-icons" aria-labelledby="info-description">
             info
         </span>
@@ -13,7 +13,12 @@
 
 <script>
     export default {
-        name: "Header"
+        name: "Header",
+        methods:{
+            getInfoHandler(){
+                this.$parent.$data.isInfoOpen = true;
+            }
+        }
     }
 </script>
 

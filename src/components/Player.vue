@@ -1,6 +1,8 @@
 <template>
     <div class="player-box" v-bind:class="{full:isFullPage}" v-on:mousemove="currentPointHandler">
         <div class="full-page-toggle footer" v-bind:class="{full:isFullPage}" role="button"
+             tabindex="0"
+             v-on:keypress.enter="fullPageClickHandler"
              aria-labelledby="full-page-description" v-on:click="fullPageClickHandler">
             <span class="material-icons" v-if="!isFullPage">
                 keyboard_arrow_up
@@ -26,7 +28,11 @@ keyboard_arrow_right
                      v-bind:alt="activeSound?activeSound.alt:'Bir zamanlar galatasarayda tanitim kapagi'">
             </div>
         </div>
-        <div class="process-bar" v-on:touchstart="processClickHandler" v-on:click="processClickHandler">
+        <div class="process-bar" v-on:touchstart="processClickHandler" v-on:click="processClickHandler"
+             v-on:keypress.space="playPauseHandler()"
+             v-on:keyup.39="timeUpdate(10)"
+             v-on:keyup.37="timeUpdate(-10)"
+             tabindex="0">
             <div class="current-bar load" v-bind:style="{width:loadProgress+'%'}">
                 <div class="current-bar" v-bind:style="{width:progress+'%'}">
                     <div class="pointer" role="button" v-on:touchmove="currentPointHandler"
@@ -43,6 +49,8 @@ keyboard_arrow_right
             <div class="controller">
                 <div class="player-button-box">
                     <span class="material-icons shuffle controller-button" aria-labelledby="shuffle-description" role="button" v-bind:class="{active:isShuffle}"
+                          tabindex="0"
+                          v-on:keypress.enter="shuffleHandler"
                           v-on:click="shuffleHandler">
                         shuffle
                    </span>
@@ -50,13 +58,18 @@ keyboard_arrow_right
                 </div>
                 <div class="player-button-box">
                     <span class="material-icons prev controller-button" aria-labelledby="prev-description" role="button"
+                          tabindex="0"
+                          v-on:keypress.enter="activeSoundHandler(activeSound?activeSound.prev:0)"
                           v-on:click="activeSoundHandler(activeSound?activeSound.prev:0)">
                     skip_previous
                      </span>
                     <span class="player-button-description" id="prev-description">Önceki Ses</span>
                 </div>
                 <div class="player-button-box">
-                    <span class="material-icons play-pause controller-button" aria-labelledby="play-description" role="button" v-on:click="playPauseHandler">
+                    <span class="material-icons play-pause controller-button" aria-labelledby="play-description" role="button"
+                          tabindex="0"
+                          v-on:keypress.enter="playPauseHandler"
+                          v-on:click="playPauseHandler">
                     {{isPlay?"pause":"play_arrow"}}
                     </span>
                     <span class="player-button-description" id="play-description"> {{isPlay?"Durdur":"Dinle"}}</span>
@@ -64,6 +77,8 @@ keyboard_arrow_right
                 </div>
                 <div class="player-button-box">
                     <span class="material-icons next controller-button"  aria-labelledby="next-description" role="button"
+                          tabindex="0"
+                          v-on:keypress.enter="activeSoundHandler(activeSound?activeSound.next:1)"
                           v-on:click="activeSoundHandler(activeSound?activeSound.next:1)">
                     skip_next
                     </span>
@@ -72,6 +87,8 @@ keyboard_arrow_right
                 </div>
                 <div class="player-button-box">
                     <span class="material-icons replay controller-button" aria-labelledby="replay-description" v-bind:class="{active:isReplay}"
+                          tabindex="0"
+                          v-on:keypress.enter="replayHandler"
                           role="button" v-on:click="replayHandler">
                         replay
                    </span>
@@ -97,7 +114,13 @@ keyboard_arrow_right
             mp.autoplay = true;
             mp.onplay = () => {
                 if (this.$props.activeSound) {
-                    this.$router.replace({name:"Home",query:{now:this.$props.activeSound.soundId}});
+                    try{
+                        this.$router.replace({name:"Home",query:{now:this.$props.activeSound.soundId}}).catch(s=>{
+                            console.log(s);
+                        });
+                    }catch(e) {
+                        console.log(e.message);
+                    }
                     this.$data.isPlay = true;
                 }
             }
@@ -232,6 +255,8 @@ keyboard_arrow_right
                     let duration = audio.duration * per / 100;
                     audio.currentTime = duration;
                 }
+            },timeUpdate(time){
+                document.getElementById("myPlayer").currentTime += time;
             }
         }, data: function () {
             return {
@@ -257,6 +282,10 @@ keyboard_arrow_right
         .full-page-area.active {
             height: 70vh !important;
 
+        }
+        .full-page-area.active .photo-area img {
+            height: 65vh!important;
+            width: 36.6vh!important;
         }
         .player-box {
             font-size: 1.5em;
@@ -415,7 +444,7 @@ keyboard_arrow_right
         display: grid;
         grid-template-columns: 1fr;
         justify-items: center;
-        color: #ccc;
+        color: #FFF;
     }
 
     .full-page-toggle.full {

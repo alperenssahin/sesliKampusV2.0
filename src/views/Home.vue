@@ -6,14 +6,18 @@
         </div>
         <div class="seslikampus">
             <Header></Header>
-            <div class="sort-info container-row" v-bind:class="{active:filterToggle}" role="button" aria-labelledby="filter-description" v-on:click="filterToggle = true">
+            <GetInfo v-if="isInfoOpen"></GetInfo>
+            <div class="sort-info container-row" v-bind:class="{active:filterToggle}" role="button"
+                 aria-labelledby="filter-description"
+                 tabindex="0"
+                 v-on:keypress.enter="filterToggle = true"
+                 v-on:click="filterToggle = true">
                 <span
                     class="material-icons">
             filter_list
                 </span>
                 <span id="filter-description">Filtre Uygula</span>
                 <div class="filterCount">{{filterList.length}}</div>
-
             </div>
             <div class="listed-sound">{{activeListLength}} ses listeleniyor.</div>
             <div class="filter-box" v-if="filterToggle">
@@ -33,14 +37,17 @@
     import Footer from "@/components/Footer";
     import FilterBox from "@/components/FilterBox";
     import {XedScroll} from "@/libs/xed-scroll";
+    import GetInfo from "@/components/GetInfo";
+    // import Share from "@/components/Share";
 
     export default {
         name: 'Home',
         components: {
+            GetInfo,
             FilterBox,
             Footer,
             Main,
-            Header
+            Header,
         }, created() {
             if(!window.downloaded){
                 window.db.ref("/sounds").once("value").then(s => {
@@ -70,6 +77,9 @@
         },
         methods: {
             activeSoundHandler: function(sound){
+                if(event.target.className && !event.target.className.includes("list-click")){
+                    return;
+                }
                 let index = this.$data.activeList.indexOf(sound);
                 if(index === -1) return;
                 try{
@@ -128,7 +138,7 @@
                 let filterArr = [];
                 for (let filter of this.$data.filterList) {
                     if(filter.relatedAttribute === "location.step3"){
-                        filterArr = filterArr.concat(array.filter(s=>filter.relatedValues.includes(s.location.step3)));
+                        filterArr = filterArr.concat(array.filter(s=>(filter.relatedValues.includes(s.location.step3))));
                     }
                     if(filterArr.length === 0) filterArr = array;
                     if(filter.relatedAttribute === "date"){
@@ -188,7 +198,6 @@
             }
         }, data: function () {
             return {
-
                 isShuffle: false,
                 isReplay: false,
                 activeListLength:0,
@@ -197,6 +206,8 @@
                 activeList:[],
                 filterList: [],
                 list: [],
+                sharePage:false,
+                isInfoOpen:false,
             }
         }
     }

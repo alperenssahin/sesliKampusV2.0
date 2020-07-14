@@ -1,6 +1,9 @@
 <template>
     <div class="filter-container">
-        <header><h2>Filtreleri Yönet</h2><span class="material-icons close" role="button" v-on:click="closeHandler">close</span></header>
+        <header><h2>Filtreleri Yönet</h2><span class="material-icons close" role="button"
+                                               tabindex="0"
+                                               v-on:keypress.enter="closeHandler"
+                                               v-on:click="closeHandler">close</span></header>
         <main class="container">
             <h3>Aktif Filtreler</h3>
 
@@ -11,22 +14,26 @@
                      v-for="filter in activeFilters.slice().reverse()"
                      v-bind:key="filter.index"
                      v-bind:class="filter.title"
-                ><strong>{{filter.title}}:</strong><span class="material-icons" role="button"
+                ><strong>{{filter.title}}:</strong><span class="material-icons" role="button" tabindex="0" v-on:keypress.enter="removeFilter(filter)"
                                                          aria-label="Filtreyi Kaldir" v-on:click="removeFilter(filter)">close</span>{{filter.showValues.join(" | ")}}
                 </div>
             </div>
             <span style="text-align: center;margin: 0;margin-bottom: 10px;">{{activeSound}} ses listeleniyor</span>
             <h3>Filtre Uygula</h3>
             <div class="filter-activation" role="button" v-bind:class="{selected:locationFilterArea}"
+                 tabindex="0"
+                 v-on:keypress.enter="locationFilterHandler"
                  v-on:click="this.locationFilterHandler">Konuma Göre Filtre Ekle
             </div>
 
 
             <div class="filter-area location" v-bind:class="{active:locationFilterArea,container:locationFilterArea}">
-                <strong v-if="message !== ''">{{message}}</strong>
+                <strong v-if="message !== ''" role="dialog">{{message}}</strong>
                 <div class="filter-area-stepper" role="list" v-if="step1ready">
                     <div class="location-step item step1" v-for="item in step1"
                          v-bind:key="item.index"
+                         tabindex="0"
+                         v-on:keypress.enter="step1ToggleHandler(item.index)"
                          v-on:click="step1ToggleHandler(item.index)"
                          role="listitem"
                          v-bind:id="item.index"><div role="button">{{item.title}}
@@ -34,13 +41,22 @@
                     </div></div>
                 </div>
                 <div class="filter-area-stepper" role="list" v-if="step2ready">
-                    <div class="location-step back" role="listitem" v-on:click="step1ReturnBackHandler"><div role="button">Geri</div></div>
+                    <div class="location-step back" role="listitem"
+                         tabindex="0"
+                         v-on:keypress.enter="step1ReturnBackHandler"
+                         v-on:click="step1ReturnBackHandler"><div role="button">Geri</div></div>
                     <div class="location-step item" role="listitem" v-for="item in step2ListFilter()"
-                         v-bind:key="item.index" v-bind:id="item.index" v-on:click="step2ToggleHandler(item.index)"><div role="button">{{item.title}}
+                         v-bind:key="item.index" v-bind:id="item.index"
+                         tabindex="0"
+                         v-on:keypress.enter="step2ToggleHandler(item.index)"
+                         v-on:click="step2ToggleHandler(item.index)"><div role="button">{{item.title}}
                         <span class="bold"> ({{locationFilterCount("step2",item.index)}})</span></div></div>
                 </div>
                 <div class="filter-area-list filter-area-stepper" role="list" v-if="locationReady">
-                    <div class="location-step back" role="listitem" v-on:click="step2ReturnBackHandler"><div role="button">Geri</div></div>
+                    <div class="location-step back" role="listitem"
+                         tabindex="0"
+                         v-on:keypress.enter="step2ReturnBackHandler"
+                         v-on:click="step2ReturnBackHandler"><div role="button">Geri</div></div>
                     <div class=" filter-area-listitem" role="listitem" v-for="item in locationListFilter()"
                          v-bind:key="item.index">
                         <input type="checkbox" v-bind:id="item.index" v-bind:value="item.title" name="location-checkbox"
@@ -48,35 +64,46 @@
                         <label v-bind:for="item.index">{{item.title}} <span class="bold"> ({{locationFilterCount("step3",item.index)}})</span></label>
                     </div>
                 </div>
-                <div role="button" class="execute-button" v-on:click="executeLocationFilter">Uygula</div>
+                <div role="button" class="execute-button"
+                     tabindex="0"
+                     v-on:keypress.enter="executeLocationFilter"
+                     v-on:click="executeLocationFilter">Uygula</div>
             </div>
 
 
             <div class="filter-activation" v-bind:class="{selected:dateFilterArea}" role="button"
+                 tabindex="0"
+                 v-on:keypress.enter="dateFilterHandler"
                  v-on:click="this.dateFilterHandler">Tarihe Göre Filtre Ekle
             </div>
             <div class="filter-area location" v-bind:class="{active:dateFilterArea,container:dateFilterArea}">
                 <div class="filter-area-form" role="form" v-if="dateFilterArea">
-                    <strong v-if="message !== ''">{{message}}</strong>
+                    <strong v-if="message !== ''" role="dialog">{{message}}</strong>
                     <label for="start-date">Başlangıç Tarihi:</label>
                     <input id="start-date" type="date" v-on:change="dateSelectHandler" value="2018-01-01">
                     <label style="margin-top: 5px" for="end-date">Bitiş Tarihi:</label>
                     <input id="end-date" type="date">
                 </div>
-                <div role="button" class="execute-button" v-on:click="executeDateFilter">Uygula</div>
+                <div role="button" class="execute-button"
+                     tabindex="0"
+                     v-on:keypress.enter="executeDateFilter"
+                     v-on:click="executeDateFilter">Uygula</div>
             </div>
             <div class="filter-activation" v-bind:class="{selected:hourFilterArea}" role="button"
                  v-on:click="this.hourFilterHandler">Saate Göre Filtre Ekle
             </div>
             <div class="filter-area location" v-bind:class="{active:hourFilterArea,container:hourFilterArea}">
-                <div class="filter-area-form" role="list" v-if="hourFilterArea">
-                    <strong v-if="message !== ''">{{message}}</strong>
+                <div class="filter-area-form" role="form" v-if="hourFilterArea">
+                    <strong v-if="message !== ''" role="dialog">{{message}}</strong>
                     <label for="start-hour">Başlangıç Saati:</label>
                     <input id="start-hour" type="time">
                     <label style="margin-top: 5px" for="end-hour">Bitiş Saati:</label>
                     <input id="end-hour" type="time">
                 </div>
-                <div role="button" class="execute-button" v-on:click="executeHourFilter">Uygula</div>
+                <div role="button" class="execute-button"
+                     tabindex="0"
+                     v-on:keypress.enter="executeHourFilter"
+                     v-on:click="executeHourFilter">Uygula</div>
             </div>
         </main>
     </div>
@@ -152,9 +179,10 @@
                             filterObj.showValues.push(s.value);
                         }
                     });
-                    this.$parent.$data.filterList.push(filterObj);
+
                     this.$data.locationFilterArea = false;
                     this.$data.step2SelectedOld = this.$data.step2Selected;
+                    this.$parent.$data.filterList.push(filterObj);
                     this.step2ReturnBackHandler();
                     this.step1ReturnBackHandler();
                     this.$data.message = "";
@@ -323,7 +351,7 @@
         grid-template-columns: 5fr 1fr;
         align-items: center;
         font-size: 0.9em;
-        color: #cccccc;
+        color: #FFF;
         background: rgb(147, 39, 143);
         background: linear-gradient(90deg, rgba(147, 39, 143, 1) 0%, rgba(241, 87, 36, 1) 100%);
         border-top-left-radius: 4px;
