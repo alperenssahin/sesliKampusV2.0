@@ -7,8 +7,8 @@
          tabindex="0"
     >
         <div class="photo">
-            <img v-bind:src="`/images/${sound.imagePath}`"
-                 v-bind:alt="sound.alt?sound.alt:'Bir zamanlar galatasarayda tanitim kapagi'">
+            <img v-bind:src="`/images/${photoPath?photoPath:sound.imagePath}`"
+                 v-bind:alt="alternativeText?alternativeText:'Bir zamanlar galatasarayda tanitim kapagi'">
         </div>
         <div class="info list-click" role="article">
             <h2 class="top list-click"><span class="title list-click">{{title}}</span>-<span
@@ -55,12 +55,16 @@
                 this.$props.sound.totalListening = s.val()
             });
             this.$parent.$parent.locationDownloader("step3", this.$props.sound.location.step3).then(s => {
-                this.$data.title = s;
+              this.$data.title = s.title;
+              this.$data.photoPath = s.photo;
+              this.$data.alternativeText = s.alt;
             });
         }, data: function () {
             return {
                 title: "",
                 sharePage:false,
+                photoPath:undefined,
+                alternativeText:undefined,
             }
         },methods:{
             sharePageHandler:function () {
@@ -195,6 +199,7 @@
     .photo img {
         width: 5em;
         height: 9em;
+      object-fit: cover;
     }
 
 </style>

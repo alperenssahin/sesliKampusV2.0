@@ -12,52 +12,52 @@
                 >close</span>
             </header>
             <main>
-                <div class="info-menu" role="navigation" v-if="isMenuActive">
-                <div role="button" tabindex="0" class="accessibility-settings info-button" id="info-first"
-                     v-on:keypress.enter="clickHandler('accessibility' , 'Erişilebilirlik Seçenekleri')"
-                     v-on:click="clickHandler('accessibility' , 'Erişilebilirlik Seçenekleri')">
-                    <div>Erişilebilirlik Seçenekleri</div>
-                    <span class="material-icons">
-                accessibility
-                </span></div>
-                <div role="button" tabindex="0" class="accessibility-settings info-button"
-                     v-on:keypress.enter="clickHandler('info', 'SesliKampüs Hakkında')"
-                     v-on:click="clickHandler('info','SesliKampüs Hakkında')"
-                >
-                    <div>SesliKampüs Hakkında</div>
-                    <span class="material-icons">
-                info
-                </span></div>
-                <div role="button" tabindex="0" class="accessibility-settings info-button"
-                     v-on:keypress.enter="clickHandler('onboard','Nasıl Kullanmalı?')"
-                     v-on:click="clickHandler('onboard','Nasıl Kullanmalı?')"
-                     v-on:focusout="focusClose"
-                >
-                    <div>Nasıl Kullanmalı?</div>
-                    <span class="material-icons">
-                help
-                </span></div>
-                </div>
-                <div class="info-content" v-if="!isMenuActive">
-                    <div class="info-back-button" role="button" id="info-second"
-                         tabindex="0"
-                         aria-label="Üst sekmeye geri dön"
-                         v-on:click="backHandler"
-                         v-on:keypress.enter="backHandler"><span class="material-icons"
-                    >keyboard_backspace</span>
-                    <span class="title">Geri</span>
-                    </div>
-                    <div class="accessibility-settings-content" v-if="accessibility">
-                        <div class="accessibility-input-row">
-                            <label for="font-size">Metin Boyutu ({{fontsize}} pt)</label>
-                            <input id="font-size" type="range" min="10" max="14" step="0.2" value="12" v-on:change="fontSizeChangeHandler">
-                        </div>
+<!--                <div class="info-menu" role="navigation" v-if="isMenuActive">-->
+<!--                <div role="button" tabindex="0" class="accessibility-settings info-button" id="info-first"-->
+<!--                     v-on:keypress.enter="clickHandler('accessibility' , 'Erişilebilirlik Seçenekleri')"-->
+<!--                     v-on:click="clickHandler('accessibility' , 'Erişilebilirlik Seçenekleri')">-->
+<!--                    <div>Erişilebilirlik Seçenekleri</div>-->
+<!--                    <span class="material-icons">-->
+<!--                accessibility-->
+<!--                </span></div>-->
+<!--                <div role="button" tabindex="0" class="accessibility-settings info-button"-->
+<!--                     v-on:keypress.enter="clickHandler('info', 'SesliKampüs Hakkında')"-->
+<!--                     v-on:click="clickHandler('info','SesliKampüs Hakkında')"-->
+<!--                >-->
+<!--                    <div>SesliKampüs Hakkında</div>-->
+<!--                    <span class="material-icons">-->
+<!--                info-->
+<!--                </span></div>-->
+<!--                <div role="button" tabindex="0" class="accessibility-settings info-button"-->
+<!--                     v-on:keypress.enter="clickHandler('onboard','Nasıl Kullanmalı?')"-->
+<!--                     v-on:click="clickHandler('onboard','Nasıl Kullanmalı?')"-->
+<!--                     v-on:focusout="focusClose"-->
+<!--                >-->
+<!--                    <div>Nasıl Kullanmalı?</div>-->
+<!--                    <span class="material-icons">-->
+<!--                help-->
+<!--                </span></div>-->
+<!--                </div>-->
+<!--                <div class="info-content" v-if="!isMenuActive">-->
+<!--                    <div class="info-back-button" role="button" id="info-second"-->
+<!--                         tabindex="0"-->
+<!--                         aria-label="Üst sekmeye geri dön"-->
+<!--                         v-on:click="backHandler"-->
+<!--                         v-on:keypress.enter="backHandler"><span class="material-icons"-->
+<!--                    >keyboard_backspace</span>-->
+<!--                    <span class="title">Geri</span>-->
+<!--                    </div>-->
+<!--                    <div class="accessibility-settings-content" v-if="accessibility">-->
 <!--                        <div class="accessibility-input-row">-->
-<!--                            <label for="font-color">Metin Rengi ({{fontColor}})</label>-->
-<!--                            <input id="font-color" type="color" value="#cccccc" v-on:change="fontColorChangeHandler">-->
+<!--                            <label for="font-size">Metin Boyutu ({{fontsize}} pt)</label>-->
+<!--                            <input id="font-size" type="range" min="10" max="14" step="0.2" value="12" v-on:change="fontSizeChangeHandler">-->
 <!--                        </div>-->
-                    </div>
-                </div>
+<!--&lt;!&ndash;                        <div class="accessibility-input-row">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <label for="font-color">Metin Rengi ({{fontColor}})</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <input id="font-color" type="color" value="#cccccc" v-on:change="fontColorChangeHandler">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
             </main>
         </div>
     </div>
@@ -207,7 +207,7 @@
         width: 80vw;
         height: 50vh;
         background-color: #444444;
-        top: 20vw;
+        top: 10vh;
         left: 10vw;
         position: absolute;
         border-radius: 4px;

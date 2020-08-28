@@ -168,7 +168,7 @@
                 return d >=a[index2] && d <= b[index2]
             },
             locationDownloader: async function (step, id) {
-                return (await window.db.ref(`/locations/${step}/${id}`).once("value")).val().title;
+                return (await window.db.ref(`/locations/${step}/${id}`).once("value")).val();
             },
             filterClose:function () {
                 this.$data.filterToggle = false;
