@@ -17,12 +17,20 @@ Geçmişten gelen sesler, kampüse gidemediğimiz şu günlerde, bizi bir zamanl
     <meta property="og:image"         content="http://www.seslikampus.com/images/logoDeg.png" />
 
     <title><%= htmlWebpackPlugin.options.title %></title>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176915549-1"></script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-176915549-1');
+    </script>
     <script>(function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
