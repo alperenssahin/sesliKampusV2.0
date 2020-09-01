@@ -12,6 +12,22 @@
                 >close</span>
             </header>
             <main>
+<!--              <p>-->
+<!--                Yavaş yavaş esen zaman rüzgarlarıyla değişen mekanın geride bıraktığı kırıntılar, kışın yapraklarını döken bir ağaç misali zihnimizin bir köşesinde tomurcuklanıp çiçek açacağı o baharı bekliyor...-->
+<!--                Geçmişten gelen sesler, kampüse gidemediğimiz şu günlerde, bizi bir zamanların Galatasarayı'na götürüyor.-->
+<!--              </p>-->
+              <p>
+                Sesli Kampüs, 2018-2019 bahar dönemlerinde Galatasaray Üniversitesi İletişim Fakültesi öğrencileri tarafından derlenen 84 ses kaydı ile kampüsün farklı mekanlarındaki hayatı, değişimi ve anıları zihinlerimizde yeniden canlandırmayı hedefleyen etkileşimli bir ses arşividir.
+              </p>
+              <p><strong>Proje Koordinatörü : </strong><span>Özgürol ÖZTÜRK</span></p>
+              <p><strong>Web Geliştirme : </strong><span>Alperen ŞAHİN</span></p>
+              <div class="sponsor">
+                <p>Teknoloji Sponsoru</p>
+                  <a href="https://xedzone.com/">
+                    <img src="https://xedzone.com/images/logo-black.png" alt="Xedzone logo">
+                  </a>
+
+              </div>
 <!--                <div class="info-menu" role="navigation" v-if="isMenuActive">-->
 <!--                <div role="button" tabindex="0" class="accessibility-settings info-button" id="info-first"-->
 <!--                     v-on:keypress.enter="clickHandler('accessibility' , 'Erişilebilirlik Seçenekleri')"-->
@@ -144,7 +160,15 @@
         display: grid;
         grid-template-columns: 1fr;
         align-content: start;
-
+      padding: 10px;
+    }
+    p{
+     color: #cccccc;
+    }
+    strong{
+      color: #fbae17;
+      font-family: "DIN Pro Bold";
+      font-weight: bolder;
     }
     main input{
         width: 100%;
@@ -205,7 +229,7 @@
 
     .get-info-container {
         width: 80vw;
-        height: 50vh;
+        min-height: 50vh;
         background-color: #444444;
         top: 10vh;
         left: 10vw;
@@ -214,5 +238,23 @@
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 5fr;
+    }
+    .sponsor{
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-content: center;
+      justify-items: center;
+      margin-top: 20px;
+    }
+    .sponsor p {
+      font-size: 12px;
+      color: #fbae17;
+    }
+    .sponsor a{
+      display: grid;
+      justify-items: center;
+    }
+     .sponsor img{
+      width: 60%;
     }
 </style>

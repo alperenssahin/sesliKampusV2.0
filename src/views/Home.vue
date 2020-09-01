@@ -1,5 +1,25 @@
 <template>
     <div class="device-box" v-bind:class="{desktop:!isMobile(),mobile:isMobile()}">
+      <div class="welcome-box" v-if="welcome">
+        <div class="welcome-container">
+          <div>
+ <span tabindex="0" @click="welcomeCloseHandler"
+     class="material-icons welcome-close">
+            close
+                </span>
+          </div>
+          <div>
+                          <p>
+                            Yavaş yavaş esen zaman rüzgarlarıyla değişen mekanın geride bıraktığı kırıntılar, kışın yapraklarını döken bir ağaç misali zihnimizin bir köşesinde tomurcuklanıp çiçek açacağı o baharı bekliyor...
+                          </p><p>
+                            Geçmişten gelen sesler, kampüse gidemediğimiz şu günlerde, bizi bir zamanların Galatasarayı'na götürüyor.
+                          </p>
+          </div>
+          <div role="button" tabindex="0" @click="welcomeCloseHandler" class="welcome-button">
+            Seslere Git
+          </div>
+        </div>
+      </div>
         <audio id="myPlayer" style="display: none"></audio>
         <div class="desktop">
             foto
@@ -77,7 +97,8 @@
         },
         methods: {
             activeSoundHandler: function(sound){
-                if(event.target.className && !event.target.className.includes("list-click")){
+
+              if(event.target.className && !event.target.className.includes("list-click")){
                     return;
                 }
                 let index = this.$data.activeList.indexOf(sound);
@@ -195,6 +216,9 @@
                 return toMatch.some((toMatchItem) => {
                     return navigator.userAgent.match(toMatchItem);
                 });
+            },
+            welcomeCloseHandler(){
+              this.$data.welcome = false;
             }
         }, data: function () {
             return {
@@ -208,6 +232,7 @@
                 list: [],
                 sharePage:false,
                 isInfoOpen:false,
+                welcome:true,
             }
         }
     }
@@ -304,6 +329,52 @@
         height: 20px;
         font-size: 1em;
         margin-top: 2px;
+    }
+    .welcome-box{
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(68, 68, 68, 0.50);
+      z-index: 99;
+    }
+    @media only screen and (min-width: 720px) {
+      .welcome-container {
+        width: 40vw !important;
+        left: 30vw !important;
+      }
+    }
+
+    .welcome-container {
+      width: 80vw;
+      min-height: 50vh;
+      background-color: #444444;
+      top: 10vh;
+      left: 10vw;
+      position: absolute;
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 5fr;
+    }
+    .welcome-close{
+      float: right;
+    }
+    .welcome-container div{
+      padding: 10px;
+    }
+    .welcome-container p {
+      color: #cccccc;
+    }
+    .welcome-button{
+      justify-self: center;
+      padding: 10px;
+      border: 1px solid #fbae17;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .welcome-button:active , .welcome-button:hover{
+      background-color: #fbae17;
+      color: black;
     }
 
     .listed-sound{

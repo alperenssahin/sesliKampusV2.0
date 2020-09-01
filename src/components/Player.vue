@@ -58,14 +58,14 @@ keyboard_arrow_right
                    </span>
           <span class="player-button-description" id="shuffle-description">Karışık Dinle</span>
         </div>
-        <div class="player-button-box">
-                    <span class="material-icons prev controller-button" aria-labelledby="prev-description" role="button"
+        <div class="player-button-box list-click">
+                    <span class="material-icons prev controller-button list-click" aria-labelledby="prev-description" role="button"
                           tabindex="0"
                           v-on:keypress.enter="activeSoundHandler(activeSound?activeSound.prev:0)"
                           v-on:click="activeSoundHandler(activeSound?activeSound.prev:0)">
                     skip_previous
                      </span>
-          <span class="player-button-description" id="prev-description">Önceki Ses</span>
+          <span class="player-button-description list-click" id="prev-description">Önceki Ses</span>
         </div>
         <div class="player-button-box">
                     <span class="material-icons play-pause controller-button" aria-labelledby="play-description"
@@ -78,14 +78,14 @@ keyboard_arrow_right
           <span class="player-button-description" id="play-description"> {{ isPlay ? "Durdur" : "Dinle" }}</span>
 
         </div>
-        <div class="player-button-box">
-                    <span class="material-icons next controller-button" aria-labelledby="next-description" role="button"
+        <div class="player-button-box list-click">
+                    <span class="material-icons next controller-button list-click" aria-labelledby="next-description" role="button"
                           tabindex="0"
                           v-on:keypress.enter="activeSoundHandler(activeSound?activeSound.next:1)"
                           v-on:click="activeSoundHandler(activeSound?activeSound.next:1)">
                     skip_next
                     </span>
-          <span class="player-button-description" id="next-description">Sıradaki Ses</span>
+          <span class="player-button-description list-click" id="next-description">Sıradaki Ses</span>
 
         </div>
         <div class="player-button-box">
